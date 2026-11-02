@@ -1,6 +1,7 @@
 const express = require('express');
 const Product = require('../models/Product');
 const { auth, requireRole } = require('../middleware/auth');
+const triggerSeoRebuild = require('../utils/seoRebuild');
 
 const router = express.Router();
 
@@ -68,6 +69,7 @@ router.post('/', auth, requireRole(['admin', 'merchant']), async (req, res) => {
 
     await product.save();
     await product.populate('createdBy', 'name email');
+    await triggerSeoRebuild();
 
     res.status(201).json({
       message: 'Product created successfully',
@@ -102,6 +104,7 @@ router.put('/:id', auth, requireRole(['admin', 'merchant']), async (req, res) =>
 
     await product.save();
     await product.populate('createdBy', 'name email');
+    await triggerSeoRebuild();
 
     res.json({
       message: 'Product updated successfully',
@@ -122,6 +125,7 @@ router.delete('/:id', auth, requireRole(['admin', 'merchant']), async (req, res)
     }
 
     await Product.findByIdAndDelete(req.params.id);
+    await triggerSeoRebuild();
 
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
