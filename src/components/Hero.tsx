@@ -37,8 +37,8 @@ const Hero = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-            Dawa Coffee Machine
-            <span className="block text-secondary"> & Business Equipment</span>
+            Coffee Machines in Kenya
+            <span className="block text-secondary"> & Commercial Equipment</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto leading-relaxed">
