@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -9,8 +10,12 @@ import {
   Recycle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { setPageMetadata } from "@/lib/seo";
 
 const About = () => {
+  useEffect(() => {
+    setPageMetadata({ title: "About Dawa Coffee Machines | Nairobi, Kenya", description: "Learn about Dawa Coffee Machines and Accessories, a Nairobi supplier of tested coffee machines, genuine spare parts and commercial business equipment.", path: "/about" });
+  }, []);
   const features = [
     {
       icon: CheckCircle,

@@ -13,6 +13,7 @@ import { sampleProducts } from "../data/products.ts";
 import { apiClient } from "@/lib/api";
 import { Search, Filter } from "lucide-react";
 import type { Product } from "@/components/ProductCard";
+import { setPageMetadata } from "@/lib/seo";
 
 const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,6 +22,14 @@ const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<string[]>(["All"]);
+
+  useEffect(() => {
+    setPageMetadata({
+      title: "Coffee Machines, Spare Parts & Equipment | Dawa Kenya",
+      description: "Browse available coffee machines, spare parts and commercial equipment from Dawa in Nairobi, Kenya. Filter by product category and condition.",
+      path: "/products",
+    });
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -64,7 +73,7 @@ const Products = () => {
       <div className="bg-gradient-primary text-primary-foreground py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Our Product Catalog
+            Coffee Machines & Commercial Equipment in Kenya
           </h1>
           <p className="text-xl text-primary-foreground/90 max-w-2xl mx-auto">
             Browse our extensive collection of Quality coffee machines
@@ -160,7 +169,7 @@ const Products = () => {
 
         {/* Product Grid */}
         {loading ? (
-          <div className="text-center py-12 bg-[url(../../public/coffee-kenya.png)]">
+          <div className="text-center py-12 bg-[url('/coffee-kenya.png')]">
             <div className="text-muted-foreground text-lg">
               Loading products...
             </div>
@@ -172,7 +181,7 @@ const Products = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-[url('../../public/coffee-kenya.png')] bg-fit bg-center bg-no-repeat">
+          <div className="text-center py-12 bg-[url('/coffee-kenya.png')] bg-fit bg-center bg-no-repeat">
             <div className="max-w-md mx-auto">
               <div className="text-muted-foreground text-lg mb-4">
                 No products found matching your criteria

@@ -3,9 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle, Phone, Mail, MapPin, Clock } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { setPageMetadata } from "@/lib/seo";
 
 const Contact = () => {
+  useEffect(() => {
+    setPageMetadata({ title: "Contact Dawa Coffee Machines | Eastleigh, Nairobi", description: "Contact Dawa in Eastleigh, Nairobi for coffee machine sales, spare parts and commercial equipment enquiries. Call, WhatsApp or visit by appointment.", path: "/contact" });
+  }, []);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Product } from "@/components/ProductCard";
+import { setPageMetadata, siteUrl } from "@/lib/seo";
 
 const ProductDetails = () => {
 	const params = useParams();
@@ -27,6 +28,46 @@ const ProductDetails = () => {
 
 		fetchProduct();
 	}, [params.id]);
+
+	useEffect(() => {
+		if (!product || !params.id) {
+			if (!loading) setPageMetadata({ title: "Product unavailable | Dawa Coffee Machines", description: "This product could not be found. Browse the current Dawa Coffee Machines catalog.", path: `/product/${params.id ?? ""}`, robots: "noindex, follow" });
+			return;
+		}
+
+		const description = `${product.title} from Dawa Coffee Machines in Nairobi, Kenya. ${product.category}. ${product.description}`.slice(0, 300);
+		const path = `/product/${params.id}`;
+		setPageMetadata({ title: `${product.title} | Dawa Coffee Machines Kenya`, description, path, image: product.image });
+
+		const price = Number(String(product.price).replace(/[^0-9.]/g, ""));
+		const schema = Number.isFinite(price) && price > 0 ? {
+			"@context": "https://schema.org",
+			"@type": "Product",
+			name: product.title,
+			description: product.description,
+			image: product.image,
+			category: product.category,
+			offers: {
+				"@type": "Offer",
+				url: `${siteUrl}${path}`,
+				priceCurrency: "KES",
+				price,
+				availability: product.stock && product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+				itemCondition: `https://schema.org/${product.condition === "New" ? "NewCondition" : "UsedCondition"}`,
+			},
+		} : null;
+		let script = document.head.querySelector<HTMLScriptElement>('script[data-page-product-schema="true"]');
+		if (!script && schema) {
+			script = document.createElement("script");
+			script.type = "application/ld+json";
+			script.dataset.pageProductSchema = "true";
+			document.head.appendChild(script);
+		}
+		if (script) {
+			if (schema) script.textContent = JSON.stringify(schema);
+			else script.remove();
+		}
+	}, [loading, params.id, product]);
 
 	// Get all images (primary + additional)
 	const getAllImages = () => {

@@ -1,10 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { setPageMetadata } from "@/lib/seo";
 
 const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
+    setPageMetadata({ title: "Page not found | Dawa Coffee Machines", description: "The requested page could not be found. Browse Dawa Coffee Machines products in Kenya.", path: location.pathname, robots: "noindex, follow" });
     console.error(
       "404 Error: User attempted to access non-existent route:",
       location.pathname

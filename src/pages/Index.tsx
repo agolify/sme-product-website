@@ -7,10 +7,19 @@ import { apiClient } from "@/lib/api";
 import { ArrowRight, Smartphone, Building, Cog } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Product } from "@/components/ProductCard";
+import { setPageMetadata } from "@/lib/seo";
 
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setPageMetadata({
+      title: "Coffee Machines & Commercial Equipment in Kenya | Dawa",
+      description: "Shop tested coffee machines, genuine spare parts and commercial catering equipment in Nairobi, Kenya. Contact Dawa for current stock and expert support.",
+      path: "/",
+    });
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -29,33 +38,20 @@ const Index = () => {
 
   const featuredProducts = products.filter((product) => product.featured);
 
-  const categories = [
-    {
-      name: "Coffee Machines",
-      icon: Smartphone,
-      description:
-        "Professional coffee machines, espresso machines, and grinders",
-      count: products.filter((p) => p.category === "Coffee Machines").length,
-    },
-    {
-      name: "Spare Parts",
-      icon: Cog,
-      description: "Genuine spare parts for all types of business equipment",
-      count: products.filter((p) => p.category === "Spare Parts").length,
-    },
-    {
-      name: "Refrigeration",
-      icon: Building,
-      description: "Commercial refrigerators, freezers, and cooling equipment",
-      count: products.filter((p) => p.category === "Refrigeration").length,
-    },
-    {
-      name: "Food Processing",
-      icon: Cog,
-      description: "Meat slicers, mixers, and food preparation equipment",
-      count: products.filter((p) => p.category === "Food Processing").length,
-    },
-  ];
+  const categoryDescriptions: Record<string, string> = {
+    "Coffee Machines": "Professional coffee machines, espresso machines, and grinders",
+    "Coffee & Beverage": "Coffee grinders, beverage equipment, and accessories",
+    "Spare Parts": "Genuine spare parts for coffee and business equipment",
+    Refrigeration: "Commercial refrigerators, freezers, and cooling equipment",
+    "Food Processing": "Food preparation equipment for commercial kitchens",
+    "Baking & Cooking": "Ovens and commercial baking and cooking equipment",
+  };
+  const categories = [...new Set(products.map((product) => product.category))].map((name) => ({
+    name,
+    icon: name.toLowerCase().includes("coffee") ? Smartphone : name === "Refrigeration" ? Building : Cog,
+    description: categoryDescriptions[name] || `Commercial ${name.toLowerCase()} for cafes, restaurants, and businesses`,
+    count: products.filter((product) => product.category === name).length,
+  }));
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,8 +73,8 @@ const Index = () => {
             {categories.map((category) => {
               const Icon = category.icon;
               return (
+                <Link to={`/category/${category.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`} key={category.name} className="block">
                 <Card
-                  key={category.name}
                   className="group hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                 >
                   <CardHeader className="text-center">
@@ -94,10 +90,11 @@ const Index = () => {
                       {category.description}
                     </p>
                     <p className="text-sm font-medium text-secondary">
-                      several items available
+                      {category.count} {category.count === 1 ? "product" : "products"} currently listed
                     </p>
                   </CardContent>
                 </Card>
+                </Link>
               );
             })}
           </div>

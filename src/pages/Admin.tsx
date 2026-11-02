@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { apiClient } from "@/lib/api";
+import { setPageMetadata } from "@/lib/seo";
 import type { Product } from "@/components/ProductCard";
 
 
@@ -69,6 +70,9 @@ const emptyDraft: Omit<Product, "id" | "_id"> = {
 };
 
 const Admin = () => {
+	useEffect(() => {
+		setPageMetadata({ title: "Admin | Dawa Coffee Machines", description: "Dawa product administration.", path: "/admin", robots: "noindex, nofollow" });
+	}, []);
 	const { products, loading, error, refresh } = useProductsState();
 	const [isAuthed, setIsAuthed] = useState<boolean>(false);
 	const [email, setEmail] = useState("");
