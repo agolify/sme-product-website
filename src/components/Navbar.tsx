@@ -48,14 +48,14 @@ const Navbar = () => {
             ))}
             <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm" asChild>
-                <a href="tel:+254114100019" className="flex items-center">
+                <a href="tel:+254185066399" className="flex items-center">
                   <Phone className="h-4 w-4 mr-1" />
                   Call
                 </a>
               </Button>
               <Button variant="secondary" size="sm" asChild>
                 <a
-                  href="https://wa.me/+254114100019"
+                  href="https://wa.me/+254185066399"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center"
